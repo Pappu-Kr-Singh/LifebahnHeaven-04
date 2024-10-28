@@ -118,8 +118,6 @@ const generateAccessAndRefreshToken = async (userId) => {
 //     .json(new ApiResponse(200, createdUser, "User Registered Successfully"));
 // });
 
-// Inside your registerUser function
-
 const registerUser = asyncHandler(async (req, res) => {
   const { fullName, email, userName, password } = req.body;
 
@@ -146,11 +144,8 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(409, "Username Already Exist");
   }
 
-  // Handle avatar retrieval differently based on environment
-  const avatar =
-    process.env.NODE_ENV === "production"
-      ? req.file?.path
-      : `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+  // Get the avatar URL directly from req.file if multer uploaded to Cloudinary successfully
+  const avatar = req.file?.path; // Cloudinary URL for avatar
 
   if (!avatar) {
     throw new ApiError(400, "Avatar is required");
@@ -158,7 +153,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   const user = await User.create({
     fullName,
-    avatar, // Storing Cloudinary URL or local path for development
+    avatar, // Storing Cloudinary URL directly
     email,
     password,
     userName: userName.toLowerCase(),
