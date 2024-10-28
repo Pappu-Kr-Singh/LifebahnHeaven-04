@@ -18,7 +18,8 @@ const Header = ({ isAuthenticated }) => {
     try {
       // First attempt to logout
       await axios.post(
-        "http://localhost:3000/api/v1/users/logout",
+        // "http://localhost:3000/api/v1/users/logout",
+        "https://lifebahn-heaven-04.vercel.app/api/v1/users/logout",
         {},
         {
           headers: {
